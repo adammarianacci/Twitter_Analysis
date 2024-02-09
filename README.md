@@ -2,6 +2,8 @@
 
 # Data Understanding
 
+Dataset: [Brands and Product Emotions](https://data.world/crowdflower/brands-and-product-emotions)
+
 # Data Preperation
 
 # Modeling
