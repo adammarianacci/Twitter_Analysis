@@ -13,6 +13,9 @@ Dataset: [Brands and Product Emotions](https://data.world/crowdflower/brands-and
 
 In this section I started by importing the necessary libraries and loading the dataset. I checked for missing values and found that there was a significant amount in the 'emotion_in_tweet_is_directed_at' column. I ended up dropping this column because of this and it did not directly relate to the business problem. I renamed the column 'is_there_an_emotion_directed_at_a_brand' to 'sentiment' for simplicity. I ran a value counts on sentiment and saw that there were 4 categories a 'no emotion', 'positive emotion', 'negative emotion' and 'I can't tell'. I dropped 'I can't tell' becuase it had a very low value count and also due to ambiguity. The remaining 3 categories had a pretty heavy imbalance so I combined them into 2 classes 'Positive' and 'Not Positive'. I had to combine 'no emotion' and 'negative emotion' because there was simply to little of the negative emotion. This however did solve the class imbalance problem. I looked at the most common words in the corpus and removed words with low semantic value that were unique to the dataset. I defined my X and y variables , 'X' as the tweets and 'y' as the sentiment. I set up a 80/20 train, test, split. Then I started the preprocessing steps of bringing stop words and created a function to get the part of speech of all the words. I also created a for loop to iterate through the whole corpus to remove punctuation and numbers, lower case everything and lemmatize the words. We set up a second train, test, split to prevent data leakage. We then fit data on a count vectorizer to get numerical features. We looked at feature importances for the words. We looked at the top used words in both classes and created a bar chart of the top words for visualization purposes. 
 
+![top5positive](images/top5positive.png)
+![top5notpositive](images/top5notpositive.png)
+
 
 
 # Modeling
