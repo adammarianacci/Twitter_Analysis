@@ -4,14 +4,36 @@ It is my job to help SXSW detect positive sentiment from tweets about their even
 
 # Data Understanding
 
-This dataset comes from 'CrowdFlower' via data.world. The initial dataframe contained roughly 9,000 tweets and information about the sentiment of the tweet as well as what brand or product the tweet was directed at. Some limitations of the dataset included missing values as well as a class imbalance in the sentiment of the tweets. Over 50% of the tweets showed no emotion, about 33% showed a positive emotion, and only around 6% showed a negative emotion. Due to this imbalance I combined some of the 'no emotion' tweets with the 'negative emotion' tweets to create a 'Not Positive' class to match the 'Positive' class. There was a lot of missing data from the emotion about the brands so I was unable to conduct analysis in this area. The dataset was also fairly small for predictive modeling. This dataset was suitable for the project because it allowed me to build a sentiment detection model from the text in the tweets against the target 'sentiment' of what tweets were considered positive and which were not.
+This dataset comes from 'CrowdFlower' via data.world. 
+
+- The initial dataframe contained roughly 9,000 tweets and information about the sentiment of the tweet as well as what brand or product the tweet was directed at.
+
+Some limitations of the dataset included missing values as well as a class imbalance in the sentiment of the tweets.
+    Over 50% of the tweets showed no emotion, about 33% showed a positive emotion, and only around 6% showed a negative emotion. Due to this imbalance I combined some of the 'no emotion' tweets with the 'negative emotion' tweets to create a 'Not Positive' class to match the 'Positive' class. 
+    
+- There was a lot of missing data from the emotion about the brands so I was unable to conduct analysis in this area.
+- The dataset was also fairly small for predictive modeling.
+ 
+    The dataset was suitable for the project because it allowed me to build a sentiment detection model from the text in the tweets against the target 'sentiment' of what tweets were considered positive and which were not.
 
 
 Dataset: [Brands and Product Emotions](https://data.world/crowdflower/brands-and-product-emotions)
 
 # Data Preperation
 
-In this section I started by importing the necessary libraries and loading the dataset. I checked for missing values and found that there was a significant amount in the 'emotion_in_tweet_is_directed_at' column. I ended up dropping this column because of this and it did not directly relate to the business problem. I renamed the column 'is_there_an_emotion_directed_at_a_brand' to 'sentiment' for simplicity. I ran a value counts on sentiment and saw that there were 4 categories a 'no emotion', 'positive emotion', 'negative emotion' and 'I can't tell'. I dropped 'I can't tell' becuase it had a very low value count and also due to ambiguity. The remaining 3 categories had a pretty heavy imbalance so I combined them into 2 classes 'Positive' and 'Not Positive'. I had to combine 'no emotion' and 'negative emotion' because there was simply to little of the negative emotion. This however did solve the class imbalance problem. I looked at the most common words in the corpus and removed words with low semantic value that were unique to the dataset. I defined my X and y variables , 'X' as the tweets and 'y' as the sentiment. I set up a 80/20 train, test, split. Then I started the preprocessing steps of bringing stop words and created a function to get the part of speech of all the words. I also created a for loop to iterate through the whole corpus to remove punctuation and numbers, lower case everything and lemmatize the words. We set up a second train, test, split to prevent data leakage. We then fit data on a count vectorizer to get numerical features. We looked at feature importances for the words. We looked at the top used words in both classes and created a bar chart of the top words for visualization purposes. 
+In this section I started by importing the necessary libraries and loading the dataset. 
+- I checked for missing values and dropped a column because there were too many. 
+- I renamed the columns for simplicity. 
+- The sentiment column had 3 imbalanced categories so I combined them into 2 classes 'Positive' and 'Not Positive'. 
+    - 'no emotion' and 'negative emotion' were combined because there was simply too few values in negative emotion. 
+- I removed words with low semantic value. 
+- I defined my X and y variables , 'X' as the tweets and 'y' as the sentiment. 
+- I set up a 80/20 train, test, split. 
+- I started preprocessing the text by bringing in stop words and created a function to get the part of speech of all the words. 
+    - I also created a for loop to iterate through the whole corpus to remove punctuation and numbers, lower case everything and lemmatize the words. 
+- I fit the data on a count vectorizer to get numerical features.
+-I looked at feature importances for the words. 
+- I looked at the top used words in both classes and created a bar chart of the top words for visualization purposes and possible recommendations.
 
 ![top5positive](images/top5positive.png)
 ![top5notpositive](images/top5notpositive.png)
@@ -23,8 +45,11 @@ In this section I started by importing the necessary libraries and loading the d
 We created 3 models
 
 - Random Forest Model with hyperparamters (n_estimators, max_features, max_depth)
+    Accuracy Score: 52%
 - Multinomial Naive Bayes Model with hyperparameters (min, max)
+    Accuracy Score: 49%
 - Multinomial Naive Bayes Model with hyperparameters (alpha)
+    Accuracy Score: 65%
 
 We got to see how well the models were performing based on the metric accuracy and tried to improve them using hyperparameters. Results will be explained in the evaluation section.
 
@@ -38,6 +63,10 @@ Our best performing model was our Multinomial Bayes model that used a GridSearch
 # Conclusion
 
 Our Multinomial Bayes model that was trained on vectorized data with the help of a Grid Search for hyperparameter tuning was our best performing model. This model had an 85% accuracy score on training data and a 65% accuracy on testing data. This is most likely due to overfitting from noise in the data. When we looked at feature importances and didn't see any words with significant importance which was most likely the contributing factor. The sample from our confusion matrix showed that the model correctly classified instances 616 times out of 953 instances. We discovered the top 5 frequently used words in the Positive class were 'party', 'win', 'one', 'time' and 'great'. The top 5 words for the Not Positive class were 'social', 'circle', 'today', 'network', and 'call'. We need to gather a lot more data, specifically with negative sentiment as this was lacking in the dataset forcing us to create a Not Positive class which was not ideal because there was a lot of data with no emotion mixed in with only a little bit of negative sentiment. We need to obtain 10x more data especially data with negative data to improve our model.
+
+## Recommendations
+
+I would recommend the words "party", "win", and "great" from the "positive" sentiment class to the SXSW marketing team to be used in advertising. I would also recommend the words "social", "circle", and "network" from the "not positive" class be looked into as why they are showing up as having either no emotion or negative emotion in tweets. These words should be used in a more positive way so I would recommend the marketing team possibly combining these words with the words from the positive class to try and improve the positive sentiment associated with them. 
 
 ## Limitations
 
